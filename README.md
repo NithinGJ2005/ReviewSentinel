@@ -1,8 +1,8 @@
 # ReviewSentinel 🔍
 
-**An autonomous AI code review agent for GitHub pull requests.**
+**An autonomous AI code review agent for GitHub pull requests powered by Google Gemini.**
 
-ReviewSentinel automatically reviews every PR, detecting bugs, security vulnerabilities, and code smells using a multi-agent LangGraph pipeline backed by Claude AI + traditional static analysis tools.
+ReviewSentinel automatically reviews every PR, detecting bugs, security vulnerabilities, and code smells using a multi-agent LangGraph pipeline backed by Gemini + traditional static analysis tools.
 
 ---
 
@@ -27,15 +27,15 @@ GitHub PR (opened/updated)
 │  4. Run static analysis (Bandit + Semgrep + ESLint)    │
 │  5. LangGraph multi-agent pipeline ─────────────────┐  │
 │     ┌──────────┐                                    │  │
-│     │  Triage  │ (Claude Haiku — cheap classification)│  │
+│     │  Triage  │      (Gemini 2.5 Flash)            │  │
 │     └────┬─────┘                                    │  │
 │          │ (parallel fan-out)                       │  │
 │    ┌─────┼────────┐                                 │  │
 │    ▼     ▼        ▼                                 │  │
-│  Bug  Security  Smell   (Claude Sonnet — reasoning) │  │
+│  Bug  Security  Smell   (Gemini 2.5 Flash)          │  │
 │    └─────┼────────┘                                 │  │
 │          ▼                                          │  │
-│      Fix Suggester (Claude Sonnet)                  │  │
+│      Fix Suggester (Gemini 2.5 Flash)               │  │
 │          ▼                                          │  │
 │      Aggregator (dedup + rank + format)             │  │
 │          └────────────────────────────────────────┘  │
@@ -65,8 +65,8 @@ GitHub PR (opened/updated)
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/your-org/review-sentinel
-cd review-sentinel
+git clone https://github.com/NithinGJ2005/ReviewSentinel
+cd ReviewSentinel
 pip install -e ".[dev]"
 ```
 
@@ -75,7 +75,7 @@ pip install -e ".[dev]"
 ```bash
 cp .env.example .env
 # Edit .env and fill in:
-# ANTHROPIC_API_KEY=...
+# GOOGLE_API_KEY=...
 # GITHUB_TOKEN=...
 ```
 
@@ -96,7 +96,7 @@ review-agent index --repo-path /path/to/your/repo
 ## GitHub Actions Setup
 
 1. **Add secrets** to your repository:
-   - `ANTHROPIC_API_KEY` — your Anthropic API key
+   - `GOOGLE_API_KEY` — your Gemini API key from Google AI Studio (free tier works great!)
    - `GITHUB_TOKEN` — auto-provided by Actions (or a PAT for cross-repo)
 
 2. **Copy the workflow files** to your target repository:
@@ -132,7 +132,7 @@ Options:
 | Layer | Technology |
 |---|---|
 | Agent orchestration | LangGraph |
-| LLM | Claude Sonnet (review) + Claude Haiku (triage) |
+| LLM | Gemini 2.5 Flash |
 | RAG / Embeddings | ChromaDB + sentence-transformers |
 | Code parsing | tree-sitter |
 | Static analysis | Semgrep + Bandit + ESLint |
@@ -162,11 +162,11 @@ review_agent/
 ├── agents/
 │   ├── graph.py              # LangGraph construction
 │   ├── state.py              # ReviewState TypedDict
-│   ├── triage.py             # Risk classification (Haiku)
-│   ├── bug_detector.py       # Logic bug detection (Sonnet)
-│   ├── security_scanner.py   # Security analysis (Sonnet)
-│   ├── smell_detector.py     # Code smell detection (Sonnet)
-│   ├── fix_suggester.py      # Fix generation (Sonnet)
+│   ├── triage.py             # Risk classification (Gemini)
+│   ├── bug_detector.py       # Logic bug detection (Gemini)
+│   ├── security_scanner.py   # Security analysis (Gemini)
+│   ├── smell_detector.py     # Code smell detection (Gemini)
+│   ├── fix_suggester.py      # Fix generation (Gemini)
 │   └── aggregator.py         # Merge, rank, format
 ├── prompts/                  # System prompts for each agent
 ├── static_analysis/          # Bandit, Semgrep, ESLint runners
@@ -181,7 +181,7 @@ review_agent/
 
 | Variable | Description | Required |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Anthropic API key | ✅ |
+| `GOOGLE_API_KEY` | Google Gemini API key | ✅ |
 | `GITHUB_TOKEN` | GitHub personal access token or Actions token | ✅ |
 | `CHROMA_DB_PATH` | Path to ChromaDB persistence directory | Optional |
 | `SQLITE_DB_PATH` | Path to SQLite database file | Optional |
