@@ -1,0 +1,8 @@
+.env
+*.pyc
+__pycache__/
+.pytest_cache/
+review_sentinel.egg-info/
+build/
+dist/
+data/
