@@ -6,22 +6,22 @@
   
   --glass-bg: hsla(222, 20%, 15%, 0.55);
   --glass-border: hsla(224, 15%, 25%, 0.45);
-  --glass-border-focus: hsla(210, 100%, 65%, 0.4);
+  --glass-border-focus: hsla(210, 100%, 72%, 0.4);
   
   --text-primary: hsl(220, 20%, 94%);
-  --text-secondary: hsl(220, 14%, 72%);
-  --text-muted: hsl(220, 10%, 52%);
+  --text-secondary: hsl(220, 15%, 80%); /* Bumed contrast from 72% */
+  --text-muted: hsl(220, 12%, 67%);     /* Bumed contrast from 52% */
   
-  --accent-blue: hsl(210, 100%, 66%);
-  --accent-blue-rgb: 60, 153, 255;
-  --accent-cyan: hsl(187, 92%, 55%);
-  --accent-cyan-rgb: 36, 217, 245;
-  --accent-red: hsl(354, 85%, 63%);
-  --accent-red-rgb: 241, 79, 90;
-  --accent-yellow: hsl(41, 95%, 61%);
-  --accent-yellow-rgb: 247, 185, 64;
-  --accent-green: hsl(142, 72%, 53%);
-  --accent-green-rgb: 39, 201, 104;
+  --accent-blue: hsl(210, 100%, 72%);  /* Bumed contrast from 66% */
+  --accent-blue-rgb: 102, 178, 255;
+  --accent-cyan: hsl(187, 92%, 60%);   /* Bumed contrast from 55% */
+  --accent-cyan-rgb: 51, 224, 247;
+  --accent-red: hsl(354, 90%, 68%);    /* Bumed contrast from 63% */
+  --accent-red-rgb: 245, 108, 117;
+  --accent-yellow: hsl(41, 95%, 65%);  /* Bumed contrast from 61% */
+  --accent-yellow-rgb: 249, 196, 82;
+  --accent-green: hsl(142, 75%, 58%);   /* Bumed contrast from 53% */
+  --accent-green-rgb: 58, 219, 117;
   
   --sidebar-width: 280px;
   --header-height: 80px;
@@ -38,6 +38,13 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* Keyboard focus accessibility indicators */
+*:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(var(--accent-blue-rgb), 0.5);
 }
 
 body {

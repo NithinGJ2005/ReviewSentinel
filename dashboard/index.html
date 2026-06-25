@@ -14,9 +14,9 @@
   <div class="app-container">
     
     <!-- Sidebar Navigation -->
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Main Navigation">
       <div class="brand">
-        <div class="logo-icon">🔍</div>
+        <div class="logo-icon" aria-hidden="true">🔍</div>
         <div class="logo-text">
           <h1>ReviewSentinel</h1>
           <span class="version">v0.1.0 (Student Edition)</span>
@@ -27,12 +27,12 @@
         <h3>Portal Mode</h3>
         <nav class="nav-menu">
           <button class="nav-item active" data-tab="student">
-            <span class="nav-icon">🎓</span>
+            <span class="nav-icon" aria-hidden="true">🎓</span>
             Student Feedback
-            <span class="pulse-dot"></span>
+            <span class="pulse-dot" aria-label="Active indicator"></span>
           </button>
           <button class="nav-item" data-tab="instructor">
-            <span class="nav-icon">🏫</span>
+            <span class="nav-icon" aria-hidden="true">🏫</span>
             Instructor Analytics
           </button>
         </nav>
@@ -40,17 +40,17 @@
 
       <div class="nav-section">
         <h3>Class Repositories</h3>
-        <ul class="repo-list">
+        <ul class="repo-list" aria-label="Class Repositories">
           <li class="repo-item active">
-            <span class="repo-indicator green"></span>
+            <span class="repo-indicator green" aria-label="Status: Healthy"></span>
             cs101/assignment-3
           </li>
           <li class="repo-item">
-            <span class="repo-indicator yellow"></span>
+            <span class="repo-indicator yellow" aria-label="Status: Attention Needed"></span>
             cs101/final-project
           </li>
           <li class="repo-item">
-            <span class="repo-indicator red"></span>
+            <span class="repo-indicator red" aria-label="Status: High Risk"></span>
             grad-nlp/lab-2
           </li>
         </ul>
@@ -81,7 +81,7 @@
             <span class="folder">cs101/assignment-3</span> / 
             <span class="current-file" id="breadcrumb-current">PR #42 Review</span>
           </div>
-          <h2 id="page-title">🎓 Student Feedback Portal</h2>
+          <h2 id="page-title"><span aria-hidden="true">🎓</span> Student Feedback Portal</h2>
         </div>
         
         <div class="header-right">
@@ -120,28 +120,28 @@
           <div class="student-grid">
             
             <!-- Left Side: Code Diff Viewer -->
-            <div class="diff-viewer glass">
+            <div class="diff-viewer glass" aria-label="Code Diff Viewer">
               <div class="viewer-header">
                 <div class="file-info">
-                  <span class="file-icon">📄</span>
+                  <span class="file-icon" aria-hidden="true">📄</span>
                   <span class="file-path">src/auth_helper.py</span>
                   <span class="file-lang">python</span>
                 </div>
                 <div class="file-actions">
-                  <button class="btn btn-outline btn-xs active">Diff</button>
-                  <button class="btn btn-outline btn-xs">Full File</button>
+                  <button class="btn btn-outline btn-xs active" aria-pressed="true">Diff</button>
+                  <button class="btn btn-outline btn-xs" aria-pressed="false">Full File</button>
                 </div>
               </div>
               
-              <div class="code-container">
+              <div class="code-container" tabindex="0" aria-label="Source code diff comparison">
                 <pre class="code-block"><code id="code-diff-content">loading diff...</code></pre>
               </div>
             </div>
 
             <!-- Right Side: Pedagogical Feedback Panel -->
             <div class="feedback-panel">
-              <h4 class="section-heading">💡 Learning Opportunities</h4>
-              <div class="feedback-list" id="student-feedback-list">
+              <h4 class="section-heading"><span aria-hidden="true">💡</span> Learning Opportunities</h4>
+              <div class="feedback-list" id="student-feedback-list" aria-label="Learning Feedback Opportunities">
                 <!-- Feedback Cards injected by JavaScript -->
               </div>
             </div>
@@ -154,88 +154,88 @@
         <section id="tab-instructor" class="tab-pane">
           
           <!-- Quick Stats Row -->
-          <div class="stats-row">
-            <div class="stat-card glass">
-              <div class="card-icon blue-bg">📊</div>
+          <ul class="stats-row" aria-label="Course Metrics Overview">
+            <li class="stat-card glass">
+              <div class="card-icon blue-bg" role="img" aria-label="Reviewed submissions statistics">📊</div>
               <div class="card-info">
                 <span class="card-title">Reviewed Submissions</span>
                 <span class="card-number">48 / 52</span>
-                <span class="card-sub text-green">✓ 92% completion rate</span>
+                <span class="card-sub text-green"><span aria-hidden="true">✓</span> 92% completion rate</span>
               </div>
-            </div>
+            </li>
             
-            <div class="stat-card glass">
-              <div class="card-icon red-bg">⚠️</div>
+            <li class="stat-card glass">
+              <div class="card-icon red-bg" role="img" aria-label="High risk alert">⚠️</div>
               <div class="card-info">
                 <span class="card-title">Triaged High Risk</span>
                 <span class="card-number">8</span>
-                <span class="card-sub text-red">▲ Requires human grading</span>
+                <span class="card-sub text-red"><span aria-hidden="true">▲</span> Requires human grading</span>
               </div>
-            </div>
+            </li>
 
-            <div class="stat-card glass">
-              <div class="card-icon yellow-bg">💡</div>
+            <li class="stat-card glass">
+              <div class="card-icon yellow-bg" role="img" aria-label="Code smell count indicator">💡</div>
               <div class="card-info">
                 <span class="card-title">Average Score Smell</span>
                 <span class="card-number">2.4</span>
                 <span class="card-sub text-yellow">Per-file code quality rating</span>
               </div>
-            </div>
+            </li>
 
-            <div class="stat-card glass">
-              <div class="card-icon green-bg">💵</div>
+            <li class="stat-card glass">
+              <div class="card-icon green-bg" role="img" aria-label="API cost stats">💵</div>
               <div class="card-info">
                 <span class="card-title">Semester API Cost</span>
                 <span class="card-number">$4.12 USD</span>
                 <span class="card-sub text-green">Using Gemini Flash 2.5</span>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
 
           <!-- Mid Section: Analytics Chart & Recent Logs -->
           <div class="instructor-grid">
             
             <!-- Left: Common Student Mistakes Chart -->
-            <div class="chart-card glass">
-              <h4 class="card-heading">📈 Top Error Types Across Class</h4>
+            <div class="chart-card glass" aria-labelledby="mistakes-heading">
+              <h4 class="card-heading" id="mistakes-heading"><span aria-hidden="true">📈</span> Top Error Types Across Class</h4>
               <p class="card-desc">Aggregated statistics extracted from SQLite history runs.</p>
               
-              <div class="chart-container">
+              <div class="chart-container" aria-label="Classroom Error Chart">
                 <div class="chart-bar-row">
-                  <span class="bar-label">SQL Injection (Security)</span>
-                  <div class="bar-wrapper">
+                  <span class="bar-label" id="bar-lbl-sql">SQL Injection (Security)</span>
+                  <div class="bar-wrapper" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-labelledby="bar-lbl-sql">
                     <div class="bar-fill red-fill" style="width: 75%;"></div>
                   </div>
                   <span class="bar-value">12 students</span>
                 </div>
                 
                 <div class="chart-bar-row">
-                  <span class="bar-label">Mutable Defaults (Bug)</span>
-                  <div class="bar-wrapper">
+                  <span class="bar-label" id="bar-lbl-mutable">Mutable Defaults (Bug)</span>
+                  <div class="bar-wrapper" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" aria-labelledby="bar-lbl-mutable">
                     <div class="bar-fill yellow-fill" style="width: 58%;"></div>
                   </div>
                   <span class="bar-value">9 students</span>
                 </div>
 
                 <div class="chart-bar-row">
-                  <span class="bar-label">Off-by-One Array Index</span>
-                  <div class="bar-wrapper">
+                  <span class="bar-label" id="bar-lbl-offbyone">Off-by-One Array Index</span>
+                  <div class="bar-wrapper" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-labelledby="bar-lbl-offbyone">
                     <div class="bar-fill yellow-fill" style="width: 50%;"></div>
                   </div>
                   <span class="bar-value">8 students</span>
                 </div>
 
                 <div class="chart-bar-row">
-                  <span class="bar-label">Resource Leak (Code Smell)</span>
-                  <div class="bar-wrapper">
+                  <span class="bar-label" id="bar-lbl-resource">Resource Leak (Code Smell)</span>
+                  <div class="bar-wrapper" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100" aria-labelledby="bar-lbl-resource">
                     <div class="bar-fill blue-fill" style="width: 38%;"></div>
                   </div>
                   <span class="bar-value">6 students</span>
                 </div>
 
                 <div class="chart-bar-row">
-                  <span class="bar-label">Magic Hardcoded Numbers</span>
-                  <div class="bar-wrapper">
+                  <span class="bar-label" id="bar-lbl-magic">Magic Hardcoded Numbers</span>
+                  <div class="bar-wrapper" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-labelledby="bar-lbl-magic">
                     <div class="bar-fill blue-fill" style="width: 25%;"></div>
                   </div>
                   <span class="bar-value">4 students</span>
@@ -244,9 +244,9 @@
             </div>
 
             <!-- Right: Triaged Student Submissions Logs -->
-            <div class="logs-card glass">
+            <div class="logs-card glass" aria-labelledby="logs-heading">
               <div class="card-header-row">
-                <h4 class="card-heading">📋 SQLite History Triage Queue</h4>
+                <h4 class="card-heading" id="logs-heading"><span aria-hidden="true">📋</span> SQLite History Triage Queue</h4>
                 <button class="btn btn-xs btn-outline">Refresh Database</button>
               </div>
               
