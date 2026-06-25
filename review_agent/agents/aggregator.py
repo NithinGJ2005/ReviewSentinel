@@ -62,14 +62,22 @@ def _format_summary(
     fixes: list[FixSuggestion],
     repo: str,
     pr_number: int,
+    student_mode: bool = False,
 ) -> str:
     """Build a Markdown summary comment for the PR."""
     if not findings:
-        return (
-            "## ✅ ReviewSentinel — No Issues Found\n\n"
-            "No bugs, security issues, or significant code smells were detected in this PR.\n\n"
-            "*Reviewed by [ReviewSentinel](https://github.com/features/actions) 🤖*"
-        )
+        if student_mode:
+            return (
+                "## ✅ ReviewSentinel — No Issues Found\n\n"
+                "Excellent job! No bugs, security issues, or code smells were detected in this submission. Keep up the great work! 🎓\n\n"
+                "*Reviewed by [ReviewSentinel](https://github.com/features/actions) 🤖*"
+            )
+        else:
+            return (
+                "## ✅ ReviewSentinel — No Issues Found\n\n"
+                "No bugs, security issues, or significant code smells were detected in this PR.\n\n"
+                "*Reviewed by [ReviewSentinel](https://github.com/features/actions) 🤖*"
+            )
 
     # Stats
     by_severity: dict[Severity, int] = defaultdict(int)
@@ -101,17 +109,39 @@ def _format_summary(
             f"| {has_fix} |"
         )
 
+    if student_mode:
+        header = f"## 🎓 ReviewSentinel — Student Feedback for `{repo}` PR #{pr_number}\n"
+        section_title = "### Learning Summary\n"
+        table_header = (
+            "\n### Learning Opportunities\n\n"
+            "| Location | Severity | Category | Feedback & Concepts | Fix Available |"
+        )
+        footer = (
+            "\n---"
+            "\n*Reviewed by [ReviewSentinel](https://github.com/features/actions) 🤖 | "
+            "Inline comments below contain detailed conceptual explanations and suggested fixes.*"
+        )
+    else:
+        header = f"## 🔍 ReviewSentinel — Code Review for `{repo}` PR #{pr_number}\n"
+        section_title = "### Summary\n"
+        table_header = (
+            "\n### Findings\n\n"
+            "| Location | Severity | Category | Issue | Fix Available |"
+        )
+        footer = (
+            "\n---"
+            "\n*Reviewed by [ReviewSentinel](https://github.com/features/actions) 🤖 | "
+            "Inline comments below contain detailed explanations and suggested fixes.*"
+        )
+
     lines = [
-        f"## 🔍 ReviewSentinel — Code Review for `{repo}` PR #{pr_number}\n",
-        "### Summary\n",
+        header,
+        section_title,
         *stats_lines,
-        "\n### Findings\n",
-        "| Location | Severity | Category | Issue | Fix Available |",
+        table_header,
         "|---|---|---|---|---|",
         *table_rows,
-        "\n---",
-        "*Reviewed by [ReviewSentinel](https://github.com/features/actions) 🤖 | "
-        "Inline comments below contain detailed explanations and suggested fixes.*",
+        footer,
     ]
     return "\n".join(lines)
 
@@ -158,8 +188,9 @@ def aggregator_node(state: ReviewState) -> ReviewState:
 
     repo = state.get("repo", "unknown/repo")
     pr_number = state.get("pr_number", 0)
+    student_mode = state.get("student_mode", False)
 
-    summary = _format_summary(ranked, fixes, repo, pr_number)
+    summary = _format_summary(ranked, fixes, repo, pr_number, student_mode=student_mode)
 
     # Build inline comments
     inline_comments: list[InlineComment] = []

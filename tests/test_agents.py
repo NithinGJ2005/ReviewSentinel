@@ -232,3 +232,41 @@ class TestAggregatorNode:
         severities = [c.body for c in comments]
         # Critical should come first
         assert "CRITICAL" in severities[0]
+
+    def test_aggregator_student_mode_summary(self):
+        from review_agent.agents.aggregator import aggregator_node
+
+        state = make_state(
+            bug_findings=[
+                self._make_finding(Severity.WARNING, Category.BUG, line=10),
+            ],
+            security_findings=[],
+            smell_findings=[],
+            suggested_fixes=[],
+            student_mode=True,
+        )
+        result = aggregator_node(state)
+        review = result["final_review"]
+        
+        # Verify student-friendly headers/sections
+        assert "Student Feedback" in review.summary
+        assert "Learning Summary" in review.summary
+        assert "Learning Opportunities" in review.summary
+        assert "Feedback & Concepts" in review.summary
+
+    def test_aggregator_student_mode_no_findings(self):
+        from review_agent.agents.aggregator import aggregator_node
+
+        state = make_state(
+            bug_findings=[],
+            security_findings=[],
+            smell_findings=[],
+            suggested_fixes=[],
+            student_mode=True,
+        )
+        result = aggregator_node(state)
+        review = result["final_review"]
+        
+        assert "No Issues Found" in review.summary
+        assert "Excellent job!" in review.summary
+        assert "Keep up the great work!" in review.summary
