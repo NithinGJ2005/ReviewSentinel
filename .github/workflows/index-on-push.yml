@@ -1,0 +1,43 @@
+name: Index Repository
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  index:
+    name: Re-index for RAG
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install ReviewSentinel
+        run: |
+          pip install --upgrade pip
+          pip install -e .
+
+      - name: Index repository
+        env:
+          CHROMA_DB_PATH: /tmp/chroma_index
+        run: |
+          review-agent index --repo-path .
+
+      - name: Upload ChromaDB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chroma-index
+          path: /tmp/chroma_index
+          retention-days: 7
