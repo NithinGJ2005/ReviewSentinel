@@ -20,10 +20,11 @@ _MODEL = genai.GenerativeModel("gemini-2.5-flash")
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "fix_suggester_prompt.txt"
 
 
-def _load_prompt() -> str:
+def _load_prompt(student_mode: bool = False) -> str:
     if _PROMPT_PATH.exists():
-        return _PROMPT_PATH.read_text(encoding="utf-8")
-    return """\
+        base = _PROMPT_PATH.read_text(encoding="utf-8")
+    else:
+        base = """\
 You are a code fix suggestion assistant. Given a code review finding and the relevant code snippet, \
 produce a minimal, correct suggested fix.
 Respond with ONLY valid JSON:
@@ -35,6 +36,12 @@ Respond with ONLY valid JSON:
 If you cannot confidently suggest a fix, return:
 {"original_code": "", "suggested_code": "", "explanation": "No safe fix available."}
 """
+
+    if student_mode:
+        suffix_path = _PROMPT_PATH.parent / "student_mode_suffix.txt"
+        if suffix_path.exists():
+            base += "\n\n" + suffix_path.read_text(encoding="utf-8")
+    return base
 
 
 def _validate_python_syntax(code: str) -> bool:
@@ -56,7 +63,7 @@ def fix_suggester_node(state: ReviewState) -> ReviewState:
     if not all_findings:
         return {"suggested_fixes": []}
 
-    system_prompt = _load_prompt()
+    system_prompt = _load_prompt(state.get("student_mode", False))
     suggestions: list[FixSuggestion] = []
     total_in = 0
     total_out = 0

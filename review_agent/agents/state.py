@@ -19,6 +19,7 @@ class ReviewState(TypedDict, total=False):
     pr_number: int
     repo: str
     dry_run: bool
+    student_mode: bool
 
     # Parsed diff
     diff_hunks: list[DiffHunk]

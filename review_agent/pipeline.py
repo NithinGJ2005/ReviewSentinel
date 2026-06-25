@@ -33,12 +33,14 @@ class ReviewPipeline:
         dry_run: bool = False,
         cost_estimate: bool = False,
         output_mode: str = "github",
+        student_mode: bool = False,
     ) -> None:
         self.repo = repo
         self.pr_number = pr_number
         self.dry_run = dry_run
         self.cost_estimate = cost_estimate
         self.output_mode = output_mode
+        self.student_mode = student_mode
 
         self._gh = GitHubClient()
         self._history = ReviewHistory()
@@ -88,6 +90,7 @@ class ReviewPipeline:
             "pr_number": self.pr_number,
             "repo": self.repo,
             "dry_run": self.dry_run,
+            "student_mode": self.student_mode,
             "diff_hunks": hunks,
             "file_context": file_context,
             "head_commit_sha": head_sha,

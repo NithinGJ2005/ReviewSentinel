@@ -1,8 +1,34 @@
 # ReviewSentinel 🔍
 
-**An autonomous AI code review agent for GitHub pull requests powered by Google Gemini.**
+**Automated, pedagogical code review feedback for CS courses — built on a multi-agent AI pipeline.**
 
-ReviewSentinel automatically reviews every PR, detecting bugs, security vulnerabilities, and code smells using a multi-agent LangGraph pipeline backed by Gemini + traditional static analysis tools.
+CS instructors spend an enormous share of their grading time repeating the same feedback: the same off-by-one error, the same SQL injection pattern, the same untested edge case, across dozens of student submissions every week. That time doesn't go toward the conceptual teaching that actually needs a human.
+
+ReviewSentinel automates the first pass. It reviews every pull request — or every student submission opened as a PR — and triages bugs, security vulnerabilities, and code smells using a multi-agent LangGraph pipeline backed by Gemini and traditional static analysis. With `--student-mode`, it doesn't just flag what's wrong — it explains the underlying concept, why it matters, and how to think about it next time, turning every review into a learning moment instead of a red mark.
+
+**Built for EdTech 3.0 — Track 2: Assessment & Feedback Automation.**
+
+---
+
+## For Instructors
+
+ReviewSentinel cuts the hours instructors spend manually catching the same logic errors, security mistakes, and style issues across dozens of student submissions. Instead of writing the same comment forty times, instructors get triaged, prioritized feedback per submission — freeing time for the conceptual teaching that actually needs a human. Every run is persisted to a SQLite history, so patterns across a whole class or semester are queryable, not just per-PR.
+
+## For Students
+
+Run with `--student-mode`, ReviewSentinel doesn't say "this is a bug" — it explains the underlying CS concept behind the issue, why it matters for your learning, and how to think about it next time. Feedback reads like a mentor's comment, not a linter's output, and it shows up the moment you open a pull request, not days later when the assignment is already due.
+
+---
+
+## How the Pipeline Maps to Assessment & Feedback Automation
+
+| Pipeline stage | What it does for grading & feedback |
+|---|---|
+| **Triage** | Prioritizes which submissions or hunks need a human instructor's attention first, instead of treating every line as equally urgent |
+| **Bug detector** | Catches logic errors before they become silent point deductions on an assignment |
+| **Security scanner** | Builds secure-coding habits early, instead of only flagging them in a later professional setting |
+| **Smell detector** | Reinforces style and maintainability lessons consistently, the same way every time, across every submission |
+| **Fix suggester** | Models the corrected pattern directly, reinforcing the right way to write it rather than just naming what's wrong |
 
 ---
 
@@ -49,6 +75,7 @@ GitHub PR (opened/updated)
 ## Features
 
 - **Multi-agent LangGraph pipeline** — specialized agents for bugs, security, and code smells
+- **`--student-mode`** — reframes every finding as learning feedback: the underlying concept, why it matters, how to think about it next time
 - **Hybrid LLM + static analysis** — Semgrep, Bandit, and ESLint feed into the LLM for false-positive reduction
 - **Inline PR comments** — file-level, line-anchored GitHub review comments
 - **Severity triage** — 🔴 Critical / 🟡 Warning / 🔵 Suggestion
@@ -56,7 +83,7 @@ GitHub PR (opened/updated)
 - **RAG context** — ChromaDB stores code chunks for semantic retrieval
 - **Cost transparency** — `--cost-estimate` flag shows token/cost breakdown
 - **Dry-run mode** — test without posting to GitHub
-- **Review history** — SQLite persists all runs for trend analysis
+- **Review history** — SQLite persists all runs for trend analysis across a class or semester
 
 ---
 
@@ -85,7 +112,13 @@ cp .env.example .env
 review-agent run --pr 42 --repo owner/myrepo --dry-run
 ```
 
-### 4. Index a Repository (for RAG)
+### 4. Run a Review in Student Mode
+
+```bash
+review-agent run --pr 42 --repo owner/student-assignment-repo --student-mode
+```
+
+### 5. Index a Repository (for RAG)
 
 ```bash
 review-agent index --repo-path /path/to/your/repo
@@ -117,6 +150,7 @@ Options:
   --dry-run         Parse and analyze but do not post to GitHub
   --cost-estimate   Print estimated token cost
   --output          github|json|markdown (default: github)
+  --student-mode    Reframe findings as learning feedback for students
   --log-level       DEBUG|INFO|WARNING (default: INFO)
 
 review-agent index --repo-path <PATH> [OPTIONS]
@@ -168,7 +202,7 @@ review_agent/
 │   ├── smell_detector.py     # Code smell detection (Gemini)
 │   ├── fix_suggester.py      # Fix generation (Gemini)
 │   └── aggregator.py         # Merge, rank, format
-├── prompts/                  # System prompts for each agent
+├── prompts/                  # System prompts for each agent (+ student_mode_suffix.txt)
 ├── static_analysis/          # Bandit, Semgrep, ESLint runners
 ├── indexing/                 # tree-sitter chunker + ChromaDB
 ├── formatting/               # GitHub review payload builder

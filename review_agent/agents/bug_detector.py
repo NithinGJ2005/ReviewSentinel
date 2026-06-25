@@ -20,10 +20,11 @@ _MODEL = genai.GenerativeModel("gemini-2.5-flash")
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "bug_detector_prompt.txt"
 
 
-def _load_prompt() -> str:
+def _load_prompt(student_mode: bool = False) -> str:
     if _PROMPT_PATH.exists():
-        return _PROMPT_PATH.read_text(encoding="utf-8")
-    return """\
+        base = _PROMPT_PATH.read_text(encoding="utf-8")
+    else:
+        base = """\
 You are an expert bug detector reviewing a GitHub pull request hunk.
 Focus ONLY on logic errors, off-by-one mistakes, null/undefined dereferences, \
 race conditions, incorrect exception handling, and incorrect algorithmic logic.
@@ -45,6 +46,12 @@ Respond with JSON only (no prose outside the JSON array):
 If no bugs are found, return an empty array: []
 """
 
+    if student_mode:
+        suffix_path = _PROMPT_PATH.parent / "student_mode_suffix.txt"
+        if suffix_path.exists():
+            base += "\n\n" + suffix_path.read_text(encoding="utf-8")
+    return base
+
 
 def _build_context_block(file_path: str, context: dict[str, str]) -> str:
     content = context.get(file_path, "")
@@ -61,7 +68,7 @@ def bug_detector_node(state: ReviewState) -> ReviewState:
     if not hunks:
         return {"bug_findings": []}
 
-    system_prompt = _load_prompt()
+    system_prompt = _load_prompt(state.get("student_mode", False))
     all_findings: list[Finding] = []
     total_in = 0
     total_out = 0

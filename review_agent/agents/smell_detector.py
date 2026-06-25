@@ -20,10 +20,11 @@ _MODEL = genai.GenerativeModel("gemini-2.5-flash")
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "smell_detector_prompt.txt"
 
 
-def _load_prompt() -> str:
+def _load_prompt(student_mode: bool = False) -> str:
     if _PROMPT_PATH.exists():
-        return _PROMPT_PATH.read_text(encoding="utf-8")
-    return """\
+        base = _PROMPT_PATH.read_text(encoding="utf-8")
+    else:
+        base = """\
 You are a code quality reviewer focused on detecting code smells and maintainability issues.
 Look for: long methods, excessive complexity, poor naming, magic numbers, dead code, duplication.
 Do NOT flag security issues or outright bugs.
@@ -40,6 +41,12 @@ Respond with ONLY a JSON array:
 If no smells found, return [].
 """
 
+    if student_mode:
+        suffix_path = _PROMPT_PATH.parent / "student_mode_suffix.txt"
+        if suffix_path.exists():
+            base += "\n\n" + suffix_path.read_text(encoding="utf-8")
+    return base
+
 
 def smell_detector_node(state: ReviewState) -> ReviewState:
     """Detect code smells in changed hunks."""
@@ -49,7 +56,7 @@ def smell_detector_node(state: ReviewState) -> ReviewState:
 
     hunks = state.get("diff_hunks", [])
     context = state.get("file_context", {})
-    system_prompt = _load_prompt()
+    system_prompt = _load_prompt(state.get("student_mode", False))
     all_findings: list[Finding] = []
     total_in = 0
     total_out = 0

@@ -60,6 +60,12 @@ def main(ctx: click.Context, log_level: str) -> None:
     default="github",
     help="Where/how to output the review.",
 )
+@click.option(
+    "--student-mode",
+    is_flag=True,
+    default=False,
+    help="Reframe findings as learning feedback for students instead of dev-style bug reports.",
+)
 @click.pass_context
 def run(
     ctx: click.Context,
@@ -68,6 +74,7 @@ def run(
     dry_run: bool,
     cost_estimate: bool,
     output: str,
+    student_mode: bool,
 ) -> None:
     """Run the full code review pipeline on a pull request."""
     from review_agent.pipeline import ReviewPipeline
@@ -78,7 +85,8 @@ def run(
         Panel.fit(
             f"[bold cyan]ReviewSentinel[/bold cyan] v0.1.0\n"
             f"[dim]Repository:[/dim] {repo}  [dim]PR:[/dim] #{pr}  "
-            f"[dim]Mode:[/dim] {'dry-run' if dry_run else 'live'}",
+            f"[dim]Mode:[/dim] {'dry-run' if dry_run else 'live'}"
+            f"{'  [dim]·[/dim]  [bold yellow]student-mode[/bold yellow]' if student_mode else ''}",
             border_style="cyan",
         )
     )
@@ -89,6 +97,7 @@ def run(
         dry_run=dry_run,
         cost_estimate=cost_estimate,
         output_mode=output,
+        student_mode=student_mode,
     )
 
     with Progress(

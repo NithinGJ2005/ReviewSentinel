@@ -20,10 +20,11 @@ _MODEL = genai.GenerativeModel("gemini-2.5-flash")
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "security_scanner_prompt.txt"
 
 
-def _load_prompt() -> str:
+def _load_prompt(student_mode: bool = False) -> str:
     if _PROMPT_PATH.exists():
-        return _PROMPT_PATH.read_text(encoding="utf-8")
-    return """\
+        base = _PROMPT_PATH.read_text(encoding="utf-8")
+    else:
+        base = """\
 You are a security-focused code reviewer. You will receive a diff hunk and any static analysis \
 findings from Semgrep/Bandit for that file.
 Evaluate static findings for true/false positives and identify additional security vulnerabilities.
@@ -41,6 +42,12 @@ Respond with ONLY a JSON array:
 If no security issues found, return [].
 """
 
+    if student_mode:
+        suffix_path = _PROMPT_PATH.parent / "student_mode_suffix.txt"
+        if suffix_path.exists():
+            base += "\n\n" + suffix_path.read_text(encoding="utf-8")
+    return base
+
 
 def security_scanner_node(state: ReviewState) -> ReviewState:
     """Combine static findings with Gemini security analysis."""
@@ -56,7 +63,7 @@ def security_scanner_node(state: ReviewState) -> ReviewState:
     for sf in static_findings:
         static_by_file.setdefault(sf.file_path, []).append(sf)
 
-    system_prompt = _load_prompt()
+    system_prompt = _load_prompt(state.get("student_mode", False))
     all_findings: list[Finding] = []
     total_in = 0
     total_out = 0

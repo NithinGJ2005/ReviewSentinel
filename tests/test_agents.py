@@ -152,6 +152,19 @@ class TestBugDetectorNode:
         result = bug_detector_node(state)
         assert result["bug_findings"] == []
 
+    def test_bug_detector_with_student_mode(self):
+        from review_agent.agents.bug_detector import bug_detector_node
+
+        with patch("review_agent.agents.bug_detector._MODEL") as mock_model:
+            mock_model.generate_content.return_value = self._mock_response([])
+            state = make_state(student_mode=True)
+            bug_detector_node(state)
+
+            # Check that generate_content was called with a prompt containing student mode suffix
+            call_args = mock_model.generate_content.call_args[0][0]
+            assert "STUDENT MODE" in call_args
+            assert "pedagogical" in call_args or "CS student" in call_args
+
 
 # -----------------------------------------------------------------------
 # Aggregator node
