@@ -228,9 +228,9 @@ review_agent/
 ---
 
 ## Demo 
-```bash
+
 ![https://nithingj2005.github.io/ReviewSentinel/dashboard/index.html](https://nithingj2005.github.io/ReviewSentinel/dashboard/index.html)
-```
+
 
 ---
 
