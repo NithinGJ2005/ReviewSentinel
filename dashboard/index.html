@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReviewSentinel 🔍 | AI Code Review Dashboard</title>
+  <!-- Google Fonts: Inter for UI, Fira Code for code blocks, Outfit for headers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo-icon">🔍</div>
+        <div class="logo-text">
+          <h1>ReviewSentinel</h1>
+          <span class="version">v0.1.0 (Student Edition)</span>
+        </div>
+      </div>
+      
+      <div class="nav-section">
+        <h3>Portal Mode</h3>
+        <nav class="nav-menu">
+          <button class="nav-item active" data-tab="student">
+            <span class="nav-icon">🎓</span>
+            Student Feedback
+            <span class="pulse-dot"></span>
+          </button>
+          <button class="nav-item" data-tab="instructor">
+            <span class="nav-icon">🏫</span>
+            Instructor Analytics
+          </button>
+        </nav>
+      </div>
+
+      <div class="nav-section">
+        <h3>Class Repositories</h3>
+        <ul class="repo-list">
+          <li class="repo-item active">
+            <span class="repo-indicator green"></span>
+            cs101/assignment-3
+          </li>
+          <li class="repo-item">
+            <span class="repo-indicator yellow"></span>
+            cs101/final-project
+          </li>
+          <li class="repo-item">
+            <span class="repo-indicator red"></span>
+            grad-nlp/lab-2
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="api-status">
+          <div class="status-top">
+            <span class="status-label">Gemini API Status</span>
+            <span class="status-value green-text">Healthy</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 82%;"></div>
+          </div>
+          <span class="status-sub">8,230 / 10,000 requests remaining</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="header">
+        <div class="header-left">
+          <div class="breadcrumb">
+            <span class="folder">Repositories</span> / 
+            <span class="folder">cs101/assignment-3</span> / 
+            <span class="current-file" id="breadcrumb-current">PR #42 Review</span>
+          </div>
+          <h2 id="page-title">🎓 Student Feedback Portal</h2>
+        </div>
+        
+        <div class="header-right">
+          <div class="meta-badge student-badge">
+            <span class="badge-dot"></span>
+            Student Mode Enabled
+          </div>
+          <div class="cost-stat">
+            <span class="stat-lbl">Estimated Session Cost:</span>
+            <span class="stat-val">$0.0076 USD</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Container -->
+      <div class="content-container">
+
+        <!-- ================= STUDENT VIEW ================= -->
+        <section id="tab-student" class="tab-pane active">
+          
+          <div class="pr-header-card glass">
+            <div class="pr-title-row">
+              <span class="pr-number">PR #42</span>
+              <h3>Refactor user auth endpoints & local DB helper logic</h3>
+              <span class="risk-badge risk-high">🔴 High Triage Alert</span>
+            </div>
+            <div class="pr-meta-row">
+              <span class="pr-author">👤 Student: Alex Chen (alex.c)</span>
+              <span class="pr-divider">•</span>
+              <span class="pr-timestamp">🕒 Submitted 2 hours ago</span>
+              <span class="pr-divider">•</span>
+              <span class="pr-branch"><code>feature/auth-refactor</code> into <code>main</code></span>
+            </div>
+          </div>
+
+          <div class="student-grid">
+            
+            <!-- Left Side: Code Diff Viewer -->
+            <div class="diff-viewer glass">
+              <div class="viewer-header">
+                <div class="file-info">
+                  <span class="file-icon">📄</span>
+                  <span class="file-path">src/auth_helper.py</span>
+                  <span class="file-lang">python</span>
+                </div>
+                <div class="file-actions">
+                  <button class="btn btn-outline btn-xs active">Diff</button>
+                  <button class="btn btn-outline btn-xs">Full File</button>
+                </div>
+              </div>
+              
+              <div class="code-container">
+                <pre class="code-block"><code id="code-diff-content">loading diff...</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Side: Pedagogical Feedback Panel -->
+            <div class="feedback-panel">
+              <h4 class="section-heading">💡 Learning Opportunities</h4>
+              <div class="feedback-list" id="student-feedback-list">
+                <!-- Feedback Cards injected by JavaScript -->
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ================= INSTRUCTOR VIEW ================= -->
+        <section id="tab-instructor" class="tab-pane">
+          
+          <!-- Quick Stats Row -->
+          <div class="stats-row">
+            <div class="stat-card glass">
+              <div class="card-icon blue-bg">📊</div>
+              <div class="card-info">
+                <span class="card-title">Reviewed Submissions</span>
+                <span class="card-number">48 / 52</span>
+                <span class="card-sub text-green">✓ 92% completion rate</span>
+              </div>
+            </div>
+            
+            <div class="stat-card glass">
+              <div class="card-icon red-bg">⚠️</div>
+              <div class="card-info">
+                <span class="card-title">Triaged High Risk</span>
+                <span class="card-number">8</span>
+                <span class="card-sub text-red">▲ Requires human grading</span>
+              </div>
+            </div>
+
+            <div class="stat-card glass">
+              <div class="card-icon yellow-bg">💡</div>
+              <div class="card-info">
+                <span class="card-title">Average Score Smell</span>
+                <span class="card-number">2.4</span>
+                <span class="card-sub text-yellow">Per-file code quality rating</span>
+              </div>
+            </div>
+
+            <div class="stat-card glass">
+              <div class="card-icon green-bg">💵</div>
+              <div class="card-info">
+                <span class="card-title">Semester API Cost</span>
+                <span class="card-number">$4.12 USD</span>
+                <span class="card-sub text-green">Using Gemini Flash 2.5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mid Section: Analytics Chart & Recent Logs -->
+          <div class="instructor-grid">
+            
+            <!-- Left: Common Student Mistakes Chart -->
+            <div class="chart-card glass">
+              <h4 class="card-heading">📈 Top Error Types Across Class</h4>
+              <p class="card-desc">Aggregated statistics extracted from SQLite history runs.</p>
+              
+              <div class="chart-container">
+                <div class="chart-bar-row">
+                  <span class="bar-label">SQL Injection (Security)</span>
+                  <div class="bar-wrapper">
+                    <div class="bar-fill red-fill" style="width: 75%;"></div>
+                  </div>
+                  <span class="bar-value">12 students</span>
+                </div>
+                
+                <div class="chart-bar-row">
+                  <span class="bar-label">Mutable Defaults (Bug)</span>
+                  <div class="bar-wrapper">
+                    <div class="bar-fill yellow-fill" style="width: 58%;"></div>
+                  </div>
+                  <span class="bar-value">9 students</span>
+                </div>
+
+                <div class="chart-bar-row">
+                  <span class="bar-label">Off-by-One Array Index</span>
+                  <div class="bar-wrapper">
+                    <div class="bar-fill yellow-fill" style="width: 50%;"></div>
+                  </div>
+                  <span class="bar-value">8 students</span>
+                </div>
+
+                <div class="chart-bar-row">
+                  <span class="bar-label">Resource Leak (Code Smell)</span>
+                  <div class="bar-wrapper">
+                    <div class="bar-fill blue-fill" style="width: 38%;"></div>
+                  </div>
+                  <span class="bar-value">6 students</span>
+                </div>
+
+                <div class="chart-bar-row">
+                  <span class="bar-label">Magic Hardcoded Numbers</span>
+                  <div class="bar-wrapper">
+                    <div class="bar-fill blue-fill" style="width: 25%;"></div>
+                  </div>
+                  <span class="bar-value">4 students</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Triaged Student Submissions Logs -->
+            <div class="logs-card glass">
+              <div class="card-header-row">
+                <h4 class="card-heading">📋 SQLite History Triage Queue</h4>
+                <button class="btn btn-xs btn-outline">Refresh Database</button>
+              </div>
+              
+              <div class="logs-container">
+                <table class="logs-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>PR #</th>
+                      <th>Triage Risk</th>
+                      <th>Errors</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="instructor-logs-body">
+                    <!-- Logs injected by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+  
+  <script src="app.js"></script>
+</body>
+</html>
